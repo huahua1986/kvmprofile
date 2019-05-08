@@ -1,0 +1,9 @@
+<network>
+  <name>mgmt.111</name>
+  <forward mode='bridge'/>
+  <bridge name='br-mgmt'/>
+  <vlan>
+    <tag id='112'/>
+  </vlan>
+  <virtualport type='openvswitch'/>
+</network>
