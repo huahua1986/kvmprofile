@@ -1,0 +1,161 @@
+<domain type='kvm' id='1'>
+  <name>node-1</name>
+  <uuid>fa0fb824-7b50-11e7-98c5-70e2840d925d</uuid>
+  <memory unit='KiB'>134217728</memory>
+  <currentMemory unit='KiB'>134217728</currentMemory>
+  <vcpu placement='static'>8</vcpu>
+  <cputune>
+    <shares>2048</shares>
+    <vcpupin vcpu='0' cpuset='2'/>
+    <vcpupin vcpu='1' cpuset='3'/>
+    <vcpupin vcpu='2' cpuset='18'/>
+    <vcpupin vcpu='3' cpuset='19'/>
+    <vcpupin vcpu='4' cpuset='10'/>
+    <vcpupin vcpu='5' cpuset='11'/>
+    <vcpupin vcpu='6' cpuset='26'/>
+    <vcpupin vcpu='7' cpuset='27'/>
+    <emulatorpin cpuset='2-3,10-11,18-19,26-27'/>
+  </cputune>
+  <numatune>
+    <memory mode='strict' nodeset='0-1'/>
+    <memnode cellid='0' mode='strict' nodeset='0'/>
+    <memnode cellid='1' mode='strict' nodeset='1'/>
+  </numatune>
+  <resource>
+    <partition>/machine</partition>
+  </resource>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-xenial'>hvm</type>
+    <bootmenu enable='no'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+  <cpu mode='host-passthrough'>
+    <topology sockets='2' cores='2' threads='2'/>
+    <numa>
+      <cell id='0' cpus='0-3' memory='67108864' unit='KiB'/>
+      <cell id='1' cpus='4-7' memory='67108864' unit='KiB'/>
+    </numa>
+  </cpu>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <pm>
+    <suspend-to-mem enabled='no'/>
+    <suspend-to-disk enabled='no'/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='directsync' io='native'/>
+      <source file='/var/lib/libvirt/images/node-1.qcow2'/>
+      <backingStore/>
+      <target dev='vda' bus='virtio'/>
+      <boot order='2'/>
+      <alias name='virtio-disk0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </disk>
+    <controller type='usb' index='0' model='ich9-ehci1'>
+      <alias name='usb'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x7'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci1'>
+      <alias name='usb'/>
+      <master startport='0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0' multifunction='on'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci2'>
+      <alias name='usb'/>
+      <master startport='2'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x1'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci3'>
+      <alias name='usb'/>
+      <master startport='4'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x2'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <alias name='virtio-serial0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'>
+      <alias name='pci.0'/>
+    </controller>
+    <interface type='bridge'>
+      <mac address='2a:68:98:a7:05:70'/>
+      <source network='roller' bridge='br-roller'/>
+      <virtualport type='openvswitch'>
+        <parameters interfaceid='7041f3b8-7b51-11e7-adee-70e2840d925d'/>
+      </virtualport>
+      <target dev='vnet2'/>
+      <model type='virtio'/>
+      <boot order='1'/>
+      <alias name='net0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <interface type='bridge'>
+      <mac address='54:c9:86:10:df:9a'/>
+      <source network='mgmt' bridge='br-mgmt'/>
+      <virtualport type='openvswitch'>
+        <parameters interfaceid='7a860fda-7b51-11e7-a8a9-70e2840d925d'/>
+      </virtualport>
+      <target dev='vnet3'/>
+      <model type='virtio'/>
+      <alias name='net1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/>
+    </interface>
+    <interface type='bridge'>
+      <mac address='54:34:3a:4f:e8:5d'/>
+      <source network='priv' bridge='br-priv'/>
+      <virtualport type='openvswitch'>
+        <parameters interfaceid='7c1d7bb2-7b51-11e7-b890-70e2840d925d'/>
+      </virtualport>
+      <target dev='vnet4'/>
+      <model type='virtio'/>
+      <alias name='net3'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x0a' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <source path='/dev/pts/3'/>
+      <target port='0'/>
+      <alias name='serial0'/>
+    </serial>
+    <console type='pty' tty='/dev/pts/3'>
+      <source path='/dev/pts/3'/>
+      <target type='serial' port='0'/>
+      <alias name='serial0'/>
+    </console>
+    <channel type='unix'>
+      <source mode='bind' path='/var/lib/libvirt/qemu/channel/target/domain-node-1/org.qemu.guest_agent.0'/>
+      <target type='virtio' name='org.qemu.guest_agent.0' state='disconnected'/>
+      <alias name='channel0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <graphics type='vnc' port='5902' autoport='yes' listen='0.0.0.0'>
+      <listen type='address' address='0.0.0.0'/>
+    </graphics>
+    <video>
+      <model type='cirrus' vram='16384' heads='1'/>
+      <alias name='video0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <memballoon model='virtio'>
+      <stats period='10'/>
+      <alias name='balloon0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+    </memballoon>
+  </devices>
+  <seclabel type='dynamic' model='apparmor' relabel='yes'>
+    <label>libvirt-bf099712-7b51-11e7-8d48-70e2840d925d</label>
+    <imagelabel>libvirt-bf099712-7b51-11e7-8d48-70e2840d925d</imagelabel>
+  </seclabel>
+</domain>
